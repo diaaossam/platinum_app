@@ -41,7 +41,7 @@ class MainCubit extends Cubit<MainState> {
   ];
   List<String> screenName =['Profile','Favorite','Home','Sell Car','My Ads'];
 
-  int currentIndex = 0;
+  int currentIndex = 2;
 
   void changeBottomNav(int index) {
     this.currentIndex = index;
@@ -74,6 +74,7 @@ class MainCubit extends Cubit<MainState> {
 
   var picker = ImagePicker();
   File? productImage;
+  File? productVedio;
 
   Future getproductImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
@@ -84,6 +85,8 @@ class MainCubit extends Cubit<MainState> {
       emit(UploadProductFailerState('No Image Selected'));
     }
   }
+
+
 
   void uploadCarInfo(
       {required CarModel carModel}) {
