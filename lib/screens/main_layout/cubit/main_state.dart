@@ -9,7 +9,7 @@ class UploadCarInfoLoading extends MainState {}
 class UploadCarInfoSuccess extends MainState {}
 class OnGetSearchLoadingState extends MainState {}
 class ChooseCategoryState extends MainState {}
-class UploadProductSuccessState extends MainState {}
+class UploadProductImageSuccessState extends MainState {}
 class UploadProductVedioSuccessState extends MainState {
   File ?file;
 

@@ -11,7 +11,7 @@ class ProductImage extends StatelessWidget {
       aspectRatio: 1,
       child: Hero(
         tag:"${carModel!.id}",
-        child: Image.network(carModel!.image ?? '', fit: BoxFit.cover),
+        child: Image.network(carModel!.images[0] ?? '', fit: BoxFit.cover),
       ),
     );
   }

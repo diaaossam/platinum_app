@@ -39,15 +39,21 @@ class MainCubit extends Cubit<MainState> {
     SellCarScreen(),
     MyAdsScreen(),
   ];
-  List<String> screenName =['Profile','Favorite','Home','Sell Car','My Ads'];
+  List<String> screenName = [
+    'Profile',
+    'Favorite',
+    'Home',
+    'Sell Car',
+    'My Ads'
+  ];
 
   int currentIndex = 2;
 
   void changeBottomNav(int index) {
     this.currentIndex = index;
-    if(index == 1){
+    if (index == 1) {
       getFavCars();
-    }else if(index ==4){
+    } else if (index == 4) {
       getMyAdsCars();
     }
     emit(ChangeBottomNavItemState());
@@ -73,52 +79,54 @@ class MainCubit extends Cubit<MainState> {
   }
 
   var picker = ImagePicker();
-  File? productImage;
-  File? productVedio;
+  List<XFile> productImages = [];
 
-  Future getproductImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  Future getproductImages() async {
+    final pickedFile = await picker.pickMultiImage();
     if (pickedFile != null) {
-      productImage = File(pickedFile.path);
-      emit(UploadProductSuccessState());
+      productImages.addAll(pickedFile);
+      emit(UploadProductImageSuccessState());
     } else {
       emit(UploadProductFailerState('No Image Selected'));
     }
   }
 
-
-
-  void uploadCarInfo(
-      {required CarModel carModel}) {
+  void uploadCarInfo({required CarModel carModel}) async {
     emit(UploadCarInfoLoading());
-
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection("cars")
         .add(carModel.toMap())
         .then((value) {
       _uploadProductImage(id: value.id);
     });
   }
-  void _uploadProductImage({required String id}) {
-    firebase_storage.FirebaseStorage.instance
-        .ref("ProductImages")
-        .child(id)
-        .putFile(productImage!)
-        .then((image) {
-      image.ref.getDownloadURL().then((value) {
-        FirebaseFirestore.instance
-            .collection("cars")
-            .doc(id)
-            .update({'id': id, 'image': value}).then((value) {
-          emit(UploadCarInfoSuccess());
+
+  List<String> imagesUrl = [];
+
+  void _uploadProductImage({required String id}) async {
+    imagesUrl = [];
+    for (int i = 0; i < productImages.length; i++) {
+      await firebase_storage.FirebaseStorage.instance
+          .ref("ProductImages")
+          .child(id)
+          .child("${Uri.file(productImages[i].path).pathSegments.last}")
+          .putFile(File(productImages[i].path))
+          .then((image) {
+        image.ref.getDownloadURL().then((value) {
+          imagesUrl.add(value);
         });
       });
+    }
+    await FirebaseFirestore.instance
+        .collection("cars")
+        .doc(id)
+        .update({'id': id, 'image': imagesUrl}).then((value) {
+      emit(UploadCarInfoSuccess());
     });
   }
 
-
   List<CarModel> favCarList = [];
-
+//Code
   void getFavCars() {
     emit(GetFavourtieCarsLoading());
     FirebaseFirestore.instance
@@ -134,21 +142,23 @@ class MainCubit extends Cubit<MainState> {
     });
   }
 
-  void removeItemFromFav(String id){
-    FirebaseFirestore.instance.collection('cars').doc(id).update({
-      'isFav':false
-    }).then((value) {
+  void removeItemFromFav(String id) {
+    FirebaseFirestore.instance
+        .collection('cars')
+        .doc(id)
+        .update({'isFav': false}).then((value) {
       emit(RemoveCarFavourtie());
     });
   }
 
-
   List<CarModel> myCarsList = [];
+
   void getMyAdsCars() {
     emit(GetMyAdsCarsLoading());
     FirebaseFirestore.instance
         .collection("cars")
-        .where('sellerId', isEqualTo: '${FirebaseAuth.instance.currentUser!.uid}')
+        .where('sellerId',
+            isEqualTo: '${FirebaseAuth.instance.currentUser!.uid}')
         .snapshots()
         .listen((event) {
       myCarsList.clear();

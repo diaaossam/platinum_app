@@ -80,27 +80,35 @@ class _SellCarScreenState extends State<SellCarScreen> {
                     ),
                     InkWell(
                       onTap: () {
-                        cubit.getproductImage();
+                        cubit.getproductImages();
                       },
                       child: Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Colors.black12),
-                        ),
-                        width: SizeConfigManger.bodyHeight * 0.1,
-                        height: SizeConfigManger.bodyHeight * 0.1,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: getProportionateScreenWidth(18.0)),
-                          child: cubit.productImage != null
-                              ? Image(
-                                  image: FileImage(cubit.productImage!),
-                                  fit: BoxFit.cover,
-                                )
-                              : Icon(
-                                  CupertinoIcons.camera,
-                                  size: getProportionateScreenHeight(20.0),
+                        width: double.infinity,
+                        height: SizeConfigManger.bodyHeight * 0.12,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: cubit.productImages.isEmpty
+                                ? 5
+                                : cubit.productImages.length,
+                            itemBuilder: (context, index) {
+                              return Container(
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Colors.black12),
                                 ),
-                        ),
+                                child: Padding(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal:
+                                            getProportionateScreenWidth(18.0)),
+                                    child: cubit.productImages.isNotEmpty
+                                        ? Image.file(File(
+                                            cubit.productImages[index].path))
+                                        : Icon(
+                                            CupertinoIcons.camera,
+                                            size: getProportionateScreenHeight(
+                                                20.0),
+                                          )),
+                              );
+                            }),
                       ),
                     ),
                     SizedBox(
@@ -115,27 +123,9 @@ class _SellCarScreenState extends State<SellCarScreen> {
                               aspectRatio: 16.0 / 21.0,
                               child: VideoPlayer(controller!),
                             )
-                          : Container(
-                              decoration: BoxDecoration(
-                                border: Border.all(color: Colors.black12),
-                              ),
-                              width: SizeConfigManger.bodyHeight * 0.3,
-                              height: SizeConfigManger.bodyHeight * 0.3,
-                              child: Padding(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal:
-                                        getProportionateScreenWidth(18.0)),
-                                child: cubit.productImage != null
-                                    ? Image(
-                                        image: FileImage(cubit.productImage!),
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Icon(
-                                        CupertinoIcons.video_camera,
-                                        size:
-                                            getProportionateScreenHeight(100.0),
-                                      ),
-                              ),
+                          : Icon(
+                              CupertinoIcons.video_camera,
+                              size: getProportionateScreenHeight(100.0),
                             ),
                     ),
                     SizedBox(
@@ -168,19 +158,22 @@ class _SellCarScreenState extends State<SellCarScreen> {
                             if (cubit.categoryText == null) {
                               Toast.show('Please Select Category Type', context,
                                   gravity: Toast.bottom);
-                            } else if (cubit.productImage == null) {
-                              Toast.show('Please Select Product Image', context,
-                                  gravity: Toast.bottom);
                             } else {
-                              cubit.uploadCarInfo(
-                                  carModel: CarModel(
-                                      sellerId: FirebaseAuth
-                                          .instance.currentUser!.uid,
-                                      title: title.text,
-                                      price: price.text,
-                                      desc: desc.text,
-                                      type: cubit.categoryText,
-                                      isFav: false));
+                              if (cubit.productImages.length < 5) {
+                                Toast.show('Please Select 5 Images', context,
+                                    gravity: Toast.bottom);
+                              } else {
+                                cubit.uploadCarInfo(
+                                    carModel: CarModel(
+                                        images: [],
+                                        sellerId: FirebaseAuth
+                                            .instance.currentUser!.uid,
+                                        title: title.text,
+                                        price: price.text,
+                                        desc: desc.text,
+                                        type: cubit.categoryText,
+                                        isFav: false));
+                              }
                             }
                           }
                         }),
