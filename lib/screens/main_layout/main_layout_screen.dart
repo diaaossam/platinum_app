@@ -22,6 +22,7 @@ class MainLayout extends StatelessWidget {
             ),
             body: cubit.screensList[cubit.currentIndex],
             bottomNavigationBar: BottomNavigationBar(
+
               items:cubit.bottomListItem,
               currentIndex: cubit.currentIndex,
               onTap: (int index)=>cubit.changeBottomNav(index),
