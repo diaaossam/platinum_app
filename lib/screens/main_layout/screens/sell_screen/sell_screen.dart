@@ -1,11 +1,10 @@
 import 'dart:io';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:platinum_app/components/custom_text_form_field.dart';
 import 'package:platinum_app/models/car_model.dart';
 import 'package:platinum_app/screens/main_layout/cubit/main_cubit.dart';
 import 'package:platinum_app/screens/main_layout/screens/sell_screen/components/drop_category.dart';
@@ -13,11 +12,12 @@ import 'package:platinum_app/shared/helper/mangers/constants.dart';
 import 'package:platinum_app/shared/helper/methods.dart';
 import 'package:tbib_toast/tbib_toast.dart';
 import 'package:video_player/video_player.dart';
-import '';
 import '../../../../components/custom_button.dart';
 import '../../../../shared/helper/icon_broken.dart';
 import '../../../../shared/helper/mangers/size_config.dart';
 import '../../../../shared/styles/styles.dart';
+import 'components/fuel_type.dart';
+import 'components/item_con.dart';
 
 class SellCarScreen extends StatefulWidget {
   @override
@@ -28,6 +28,16 @@ class _SellCarScreenState extends State<SellCarScreen> {
   var title = TextEditingController();
   var price = TextEditingController();
   var desc = TextEditingController();
+
+  var countryReg = TextEditingController();
+  var enginePower = TextEditingController();
+  var mileage = TextEditingController();
+  var licenseExpire = TextEditingController();
+  var year = TextEditingController();
+  var color = TextEditingController();
+  var number = TextEditingController();
+  var problems = TextEditingController();
+
   var formKey = GlobalKey<FormState>();
 
   VideoPlayerController? controller;
@@ -133,12 +143,81 @@ class _SellCarScreenState extends State<SellCarScreen> {
                     ),
                     buildProductTitleFormField(cubit),
                     SizedBox(
-                      height: getProportionateScreenHeight(20.0),
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    DropDownCategory(),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
                     ),
                     buildProductDescprtionFormField(cubit),
                     SizedBox(
-                      height: getProportionateScreenHeight(20.0),
+                      height: getProportionateScreenHeight(10.0),
                     ),
+                    CustomTextFormField(
+                        controller: countryReg,
+                        lableText: 'Country registration',
+                        hintText: 'Enter Country registration'),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    CustomTextFormField(
+                        controller: enginePower,
+                        lableText: 'Engine Power',
+                        hintText: 'Enter Country registration'),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    CustomTextFormField(
+                        controller: mileage,
+                        lableText: 'mileage',
+                        hintText: 'Enter mileage'),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    CustomTextFormField(
+                        controller: licenseExpire,
+                        lableText: 'License Expiration Date',
+                        hintText: 'Enter Expiration Date'),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    CustomTextFormField(
+                        controller: year,
+                        lableText: 'Year',
+                        hintText: 'Enter Year'),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    CustomTextFormField(
+                        controller: color,
+                        lableText: 'Color',
+                        hintText: 'Enter Color'),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    DropDownFuelType(),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    CustomTextFormField(
+                        controller: number,
+                        lableText: 'Number Of Owner',
+                        hintText: 'Enter Number'),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    CustomTextFormField(
+                        controller: problems,
+                        lableText: 'Any car Problems',
+                        hintText: 'Enter Car Problems'),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    DropDownItemCondition(),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    //done
                     Padding(
                       padding: EdgeInsets.symmetric(
                           horizontal: getProportionateScreenHeight(80.0)),
@@ -158,22 +237,34 @@ class _SellCarScreenState extends State<SellCarScreen> {
                             if (cubit.categoryText == null) {
                               Toast.show('Please Select Category Type', context,
                                   gravity: Toast.bottom);
+                            } else if (cubit.productImages.length < 5) {
+                              Toast.show('Please Select 5 Images', context,
+                                  gravity: Toast.bottom);
+                            } else if (productVedio == null) {
+                              Toast.show('Please Select vedio', context,
+                                  gravity: Toast.bottom);
                             } else {
-                              if (cubit.productImages.length < 5) {
-                                Toast.show('Please Select 5 Images', context,
-                                    gravity: Toast.bottom);
-                              } else {
-                                cubit.uploadCarInfo(
-                                    carModel: CarModel(
-                                        images: [],
-                                        sellerId: FirebaseAuth
-                                            .instance.currentUser!.uid,
-                                        title: title.text,
-                                        price: price.text,
-                                        desc: desc.text,
-                                        type: cubit.categoryText,
-                                        isFav: false));
-                              }
+                              cubit.uploadCarInfo(
+                                  vedioFile: productVedio!,
+                                  carModel: CarModel(
+                                      year: year.text,
+                                      video: ConstantsManger.DEFAULT,
+                                      problems: problems.text,
+                                      number: number.text,
+                                      mileage: mileage.text,
+                                      licenseExpire: licenseExpire.text,
+                                      itemCon: cubit.itemCon,
+                                      fuelType: cubit.fuelType,
+                                      enginePower: enginePower.text,
+                                      countryReg: countryReg.text,
+                                      color: color.text,
+                                      images: [],
+                                      sellerId: FirebaseAuth.instance.currentUser!.uid,
+                                      title: title.text,
+                                      price: price.text,
+                                      desc: desc.text,
+                                      type: cubit.categoryText,
+                                      isFav: false));
                             }
                           }
                         }),

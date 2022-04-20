@@ -62,7 +62,7 @@ class MainCubit extends Cubit<MainState> {
   void getSearchData({required String searchText}) {
     emit(OnGetSearchLoadingState());
   }
-
+/////////////////////////////////////////////////////////
   String? categoryText;
   List<String> categoryList = [
     ConstantsManger.VAN,
@@ -77,7 +77,33 @@ class MainCubit extends Cubit<MainState> {
     this.categoryText = cat;
     emit(ChooseCategoryState());
   }
+///////////////////////////////////////////////
+  String? fuelType;
+  List<String> fuelList = [
+    'Petrol','Diesel','Gasoline','Ethanol','Diesel Hybrid',
+    'Bi-Fuel','Electric','Petrol Hybrid'
+  ];
 
+  void choosefuelType(String Fuelatype) {
+    this.fuelType = Fuelatype;
+    emit(ChooseFuelState());
+  }
+
+
+  ///////////////////////////////////////////////
+  String? itemCon;
+  List<String> itemConList = [
+    'Used','New',
+  ];
+
+  void chooseItemCon(String ad) {
+    this.itemCon = ad;
+    emit(ChooseItemConState());
+  }
+
+
+
+  //////////////////////////////////////////////
   var picker = ImagePicker();
   List<XFile> productImages = [];
 
@@ -91,19 +117,21 @@ class MainCubit extends Cubit<MainState> {
     }
   }
 
-  void uploadCarInfo({required CarModel carModel}) async {
+  void uploadCarInfo(
+      {required CarModel carModel, required File vedioFile}) async {
     emit(UploadCarInfoLoading());
     await FirebaseFirestore.instance
         .collection("cars")
         .add(carModel.toMap())
         .then((value) {
-      _uploadProductImage(id: value.id);
+      _uploadProductImage(id: value.id,vedioFile: vedioFile);
     });
   }
 
   List<String> imagesUrl = [];
 
-  void _uploadProductImage({required String id}) async {
+  void _uploadProductImage(
+      {required String id, required File vedioFile}) async {
     imagesUrl = [];
     for (int i = 0; i < productImages.length; i++) {
       await firebase_storage.FirebaseStorage.instance
@@ -117,16 +145,25 @@ class MainCubit extends Cubit<MainState> {
         });
       });
     }
-    await FirebaseFirestore.instance
-        .collection("cars")
-        .doc(id)
-        .update({'id': id, 'image': imagesUrl}).then((value) {
-      emit(UploadCarInfoSuccess());
+    await firebase_storage.FirebaseStorage.instance
+        .ref("ProductVedios")
+        .child(id)
+        .putFile(vedioFile)
+        .then((vedio) {
+     vedio.ref.getDownloadURL().then((value)async{
+       await FirebaseFirestore.instance
+           .collection("cars")
+           .doc(id)
+           .update({'id': id, 'image': imagesUrl , 'video':value}).then((value) {
+         emit(UploadCarInfoSuccess());
+       });
+      });
     });
+
   }
 
   List<CarModel> favCarList = [];
-//Code
+
   void getFavCars() {
     emit(GetFavourtieCarsLoading());
     FirebaseFirestore.instance
