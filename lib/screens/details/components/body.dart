@@ -14,7 +14,7 @@ class Body extends StatelessWidget {
   final CarModel? carModel;
 
   const Body({Key? key, required this.carModel}) : super(key: key);
-
+//Ok
   @override
   Widget build(BuildContext context) {
     return BlocProvider<DetailsCubit>(
@@ -31,7 +31,7 @@ class Body extends StatelessWidget {
           DetailsCubit cubit = DetailsCubit.get(context);
           return state is GetCarModelLoading ?Center(child: CircularProgressIndicator(),):ListView(
             children: [
-              ProductImage(carModel: cubit.carModel!),
+              ProductImages(carModel: cubit.carModel!),
               TopRoundedContainer(
                 color: Colors.white,
                 child: Column(
