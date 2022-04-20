@@ -13,8 +13,12 @@ class DropDownCategory extends StatelessWidget {
       builder: (context, state) {
         return DropdownButtonHideUnderline(
           child: DropdownButton2(
+            buttonDecoration: BoxDecoration(
+              border: Border.all(color: Colors.grey,),
+                  borderRadius: BorderRadius.all(Radius.circular(15))
+            ),
             hint: Text(
-              'Select Item Category',
+              'Build Type',
               style: TextStyle(
                 fontSize: getProportionateScreenHeight(20.0),
                 color: Theme
@@ -43,7 +47,7 @@ class DropDownCategory extends StatelessWidget {
               MainCubit.get(context).chooseCategory(value as String);
             },
             buttonHeight: getProportionateScreenHeight(50.0),
-            buttonWidth: getProportionateScreenHeight(240),
+            buttonWidth: double.infinity,
             itemHeight: getProportionateScreenHeight(50.0),
           ),
         );

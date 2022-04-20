@@ -31,3 +31,4 @@ class RemoveCarFavourtie extends MainState {}
 class GetMyAdsCarsSuccess extends MainState {}
 class GetMyAdsCarsLoading extends MainState {}
 class RemoveCarMyAds extends MainState {}
+class ChangeCheckBoxState extends MainState {}

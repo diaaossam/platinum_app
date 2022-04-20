@@ -72,7 +72,7 @@ class MyAdsScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(
                             getProportionateScreenHeight(8.0)),
                         image: DecorationImage(
-                            image: NetworkImage('${model!.images[0]}'),
+                            image: NetworkImage('${model!.image[0]}'),
                             fit: BoxFit.cover)),
                   ),
                 ),

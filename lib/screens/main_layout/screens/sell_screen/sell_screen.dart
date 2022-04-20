@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:platinum_app/components/app_text.dart';
 import 'package:platinum_app/components/custom_text_form_field.dart';
 import 'package:platinum_app/models/car_model.dart';
 import 'package:platinum_app/screens/main_layout/cubit/main_cubit.dart';
 import 'package:platinum_app/screens/main_layout/screens/sell_screen/components/drop_category.dart';
+import 'package:platinum_app/shared/helper/mangers/colors.dart';
 import 'package:platinum_app/shared/helper/mangers/constants.dart';
 import 'package:platinum_app/shared/helper/methods.dart';
 import 'package:tbib_toast/tbib_toast.dart';
@@ -37,6 +39,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
   var color = TextEditingController();
   var number = TextEditingController();
   var problems = TextEditingController();
+
 
   var formKey = GlobalKey<FormState>();
 
@@ -94,7 +97,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
                       },
                       child: Container(
                         width: double.infinity,
-                        height: SizeConfigManger.bodyHeight * 0.12,
+                        height: SizeConfigManger.bodyHeight * 0.10,
                         child: ListView.builder(
                             scrollDirection: Axis.horizontal,
                             itemCount: cubit.productImages.isEmpty
@@ -102,6 +105,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
                                 : cubit.productImages.length,
                             itemBuilder: (context, index) {
                               return Container(
+                                width: SizeConfigManger.screenWidth * 0.18,
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Colors.black12),
                                 ),
@@ -110,8 +114,11 @@ class _SellCarScreenState extends State<SellCarScreen> {
                                         horizontal:
                                             getProportionateScreenWidth(18.0)),
                                     child: cubit.productImages.isNotEmpty
-                                        ? Image.file(File(
-                                            cubit.productImages[index].path))
+                                        ? Container(
+                                      width: double.infinity,
+                                          child: Image.file(File(
+                                              cubit.productImages[index].path),fit: BoxFit.cover,),
+                                        )
                                         : Icon(
                                             CupertinoIcons.camera,
                                             size: getProportionateScreenHeight(
@@ -141,57 +148,45 @@ class _SellCarScreenState extends State<SellCarScreen> {
                     SizedBox(
                       height: getProportionateScreenHeight(20.0),
                     ),
-                    buildProductTitleFormField(cubit),
-                    SizedBox(
-                      height: getProportionateScreenHeight(10.0),
-                    ),
                     DropDownCategory(),
-                    SizedBox(
-                      height: getProportionateScreenHeight(10.0),
-                    ),
-                    buildProductDescprtionFormField(cubit),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
                     CustomTextFormField(
                         controller: countryReg,
                         lableText: 'Country registration',
-                        hintText: 'Enter Country registration'),
+                        hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
                     CustomTextFormField(
                         controller: enginePower,
                         lableText: 'Engine Power',
-                        hintText: 'Enter Country registration'),
+                        hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
                     CustomTextFormField(
                         controller: mileage,
                         lableText: 'mileage',
-                        hintText: 'Enter mileage'),
+                        hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
                     CustomTextFormField(
                         controller: licenseExpire,
                         lableText: 'License Expiration Date',
-                        hintText: 'Enter Expiration Date'),
+                        hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
                     CustomTextFormField(
-                        controller: year,
-                        lableText: 'Year',
-                        hintText: 'Enter Year'),
+                        controller: year, lableText: 'Year', hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
                     CustomTextFormField(
-                        controller: color,
-                        lableText: 'Color',
-                        hintText: 'Enter Color'),
+                        controller: color, lableText: 'Color', hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
@@ -202,14 +197,34 @@ class _SellCarScreenState extends State<SellCarScreen> {
                     CustomTextFormField(
                         controller: number,
                         lableText: 'Number Of Owner',
-                        hintText: 'Enter Number'),
+                        hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
                     CustomTextFormField(
                         controller: problems,
                         lableText: 'Any car Problems',
-                        hintText: 'Enter Car Problems'),
+                        hintText: 'n'),
+                    SizedBox(
+                      height: getProportionateScreenHeight(20.0),
+                    ),
+
+                    AppText(text: 'License Status'),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    Row(
+                      children: [
+                        Checkbox(
+                          value: cubit.carTaxPaid,
+                          activeColor: ColorsManger.primaryColor,
+                          onChanged: (value) {
+                            cubit.setUpCarTaxPaid();
+                          },
+                        ),
+                        AppText(text: 'Car Text Paid ?'),
+                      ],
+                    ),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
@@ -218,17 +233,17 @@ class _SellCarScreenState extends State<SellCarScreen> {
                       height: getProportionateScreenHeight(10.0),
                     ),
                     //done
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: getProportionateScreenHeight(80.0)),
-                      child: buildProductPriceFormField(cubit),
+                    buildProductPriceFormField(cubit),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
                     ),
+                     buildProductDescprtionFormField(cubit),
+                    SizedBox(
+                      height: getProportionateScreenHeight(10.0),
+                    ),
+                    buildProductTitleFormField(cubit),
                     SizedBox(
                       height: getProportionateScreenHeight(20.0),
-                    ),
-                    DropDownCategory(),
-                    SizedBox(
-                      height: getProportionateScreenHeight(40.0),
                     ),
                     CustomButton(
                         text: 'Confirm',
@@ -258,8 +273,9 @@ class _SellCarScreenState extends State<SellCarScreen> {
                                       enginePower: enginePower.text,
                                       countryReg: countryReg.text,
                                       color: color.text,
-                                      images: [],
-                                      sellerId: FirebaseAuth.instance.currentUser!.uid,
+                                      image: [],
+                                      sellerId: FirebaseAuth
+                                          .instance.currentUser!.uid,
                                       title: title.text,
                                       price: price.text,
                                       desc: desc.text,
@@ -292,7 +308,6 @@ class _SellCarScreenState extends State<SellCarScreen> {
         border: ThemeManger.outlineInputBorder(),
         labelText: "Product Title",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Icon(IconBroken.Ticket),
       ),
     );
   }
@@ -312,7 +327,6 @@ class _SellCarScreenState extends State<SellCarScreen> {
         border: ThemeManger.outlineInputBorder(),
         labelText: "Product Description",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Icon(IconBroken.Ticket),
       ),
     );
   }
@@ -332,7 +346,6 @@ class _SellCarScreenState extends State<SellCarScreen> {
         border: ThemeManger.outlineInputBorder(),
         labelText: "Product Price",
         floatingLabelBehavior: FloatingLabelBehavior.always,
-        suffixIcon: Icon(IconBroken.Ticket),
       ),
     );
   }

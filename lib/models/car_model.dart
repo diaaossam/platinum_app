@@ -5,7 +5,7 @@ class CarModel {
   String? sellerId;
   String? title;
   String? price;
-  List<String> images = [];
+  List<String> image = [];
   String? video;
   String? desc;
   bool? isFav;
@@ -21,7 +21,7 @@ class CarModel {
     required this.sellerId,
     required this.desc,
     required this.type,
-    required this.images,
+    required this.image,
     required this.video,
     required this.isFav,
 
@@ -40,13 +40,14 @@ class CarModel {
   CarModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
+
     price = json['price'];
     desc = json['desc'];
     video = json['video'];
     isFav = json['isFav'];
-    if (json['images'] != null) {
-      json['images'].forEach((element) {
-        images.add(element);
+    if (json['image'] != null) {
+      json['image'].forEach((element) {
+        image.add(element);
       });
     }
     type = json['type'];
@@ -72,7 +73,7 @@ class CarModel {
       'price': price,
       'desc': desc,
       'isFav': isFav,
-      'images': images,
+      'image': image,
       'type': type,
       'sellerId': sellerId,
       'video':video,

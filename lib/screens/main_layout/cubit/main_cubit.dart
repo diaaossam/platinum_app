@@ -206,4 +206,10 @@ class MainCubit extends Cubit<MainState> {
       emit(GetMyAdsCarsSuccess());
     });
   }
+
+  bool carTaxPaid = false;
+   void setUpCarTaxPaid(){
+     this.carTaxPaid= !carTaxPaid;
+     emit(ChangeCheckBoxState());
+   }
 }
