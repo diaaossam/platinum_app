@@ -44,7 +44,7 @@ class CustomTextFormField extends StatelessWidget {
         labelText: lableText,
         hintText: hintText == 'n'  ? null :hintText,
         border: ThemeManger.outlineInputBorder(),
-        floatingLabelBehavior: FloatingLabelBehavior.never,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: suffixIcon == null
             ? null
             : Padding(

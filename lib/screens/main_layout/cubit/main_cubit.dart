@@ -39,15 +39,21 @@ class MainCubit extends Cubit<MainState> {
     SellCarScreen(),
     MyAdsScreen(),
   ];
-  List<String> screenName =['Profile','Favorite','Home','Sell Car','My Ads'];
+  List<String> screenName = [
+    'Profile',
+    'Favorite',
+    'Home',
+    'Sell Car',
+    'My Ads'
+  ];
 
-  int currentIndex = 0;
+  int currentIndex = 2;
 
   void changeBottomNav(int index) {
     this.currentIndex = index;
-    if(index == 1){
+    if (index == 1) {
       getFavCars();
-    }else if(index ==4){
+    } else if (index == 4) {
       getMyAdsCars();
     }
     emit(ChangeBottomNavItemState());
@@ -56,7 +62,7 @@ class MainCubit extends Cubit<MainState> {
   void getSearchData({required String searchText}) {
     emit(OnGetSearchLoadingState());
   }
-
+/////////////////////////////////////////////////////////
   String? categoryText;
   List<String> categoryList = [
     ConstantsManger.VAN,
@@ -71,48 +77,90 @@ class MainCubit extends Cubit<MainState> {
     this.categoryText = cat;
     emit(ChooseCategoryState());
   }
+///////////////////////////////////////////////
+  String? fuelType;
+  List<String> fuelList = [
+    'Petrol','Diesel','Gasoline','Ethanol','Diesel Hybrid',
+    'Bi-Fuel','Electric','Petrol Hybrid'
+  ];
 
+  void choosefuelType(String Fuelatype) {
+    this.fuelType = Fuelatype;
+    emit(ChooseFuelState());
+  }
+
+
+  ///////////////////////////////////////////////
+  String? itemCon;
+  List<String> itemConList = [
+    'Used','New',
+  ];
+
+  void chooseItemCon(String ad) {
+    this.itemCon = ad;
+    emit(ChooseItemConState());
+  }
+
+
+
+  //////////////////////////////////////////////
   var picker = ImagePicker();
-  File? productImage;
+  List<XFile> productImages = [];
 
-  Future getproductImage() async {
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+  Future getproductImages() async {
+    final pickedFile = await picker.pickMultiImage();
     if (pickedFile != null) {
-      productImage = File(pickedFile.path);
-      emit(UploadProductSuccessState());
+      productImages.addAll(pickedFile);
+      emit(UploadProductImageSuccessState());
     } else {
       emit(UploadProductFailerState('No Image Selected'));
     }
   }
 
   void uploadCarInfo(
-      {required CarModel carModel}) {
+      {required CarModel carModel, required File vedioFile}) async {
     emit(UploadCarInfoLoading());
-
-    FirebaseFirestore.instance
+    await FirebaseFirestore.instance
         .collection("cars")
         .add(carModel.toMap())
         .then((value) {
-      _uploadProductImage(id: value.id);
-    });
-  }
-  void _uploadProductImage({required String id}) {
-    firebase_storage.FirebaseStorage.instance
-        .ref("ProductImages")
-        .child(id)
-        .putFile(productImage!)
-        .then((image) {
-      image.ref.getDownloadURL().then((value) {
-        FirebaseFirestore.instance
-            .collection("cars")
-            .doc(id)
-            .update({'id': id, 'image': value}).then((value) {
-          emit(UploadCarInfoSuccess());
-        });
-      });
+      _uploadProductImage(id: value.id,vedioFile: vedioFile);
     });
   }
 
+  List<String> imagesUrl = [];
+
+  void _uploadProductImage(
+      {required String id, required File vedioFile}) async {
+    imagesUrl = [];
+    for (int i = 0; i < productImages.length; i++) {
+      await firebase_storage.FirebaseStorage.instance
+          .ref("ProductImages")
+          .child(id)
+          .child("${Uri.file(productImages[i].path).pathSegments.last}")
+          .putFile(File(productImages[i].path))
+          .then((image) {
+        image.ref.getDownloadURL().then((value) {
+          imagesUrl.add(value);
+        });
+      });
+    }
+    await firebase_storage.FirebaseStorage.instance
+        .ref("ProductVedios")
+        .child(id)
+        .putFile(vedioFile)
+        .then((vedio) {
+     vedio.ref.getDownloadURL().then((value)async{
+       await FirebaseFirestore.instance
+           .collection("cars")
+           .doc(id)
+           .update({'id': id, 'image': imagesUrl , 'video':value}).then((value) {
+         emit(UploadCarInfoSuccess());
+       });
+      });
+    });
+
+  }
 
   List<CarModel> favCarList = [];
 
@@ -131,21 +179,23 @@ class MainCubit extends Cubit<MainState> {
     });
   }
 
-  void removeItemFromFav(String id){
-    FirebaseFirestore.instance.collection('cars').doc(id).update({
-      'isFav':false
-    }).then((value) {
+  void removeItemFromFav(String id) {
+    FirebaseFirestore.instance
+        .collection('cars')
+        .doc(id)
+        .update({'isFav': false}).then((value) {
       emit(RemoveCarFavourtie());
     });
   }
 
-
   List<CarModel> myCarsList = [];
+
   void getMyAdsCars() {
     emit(GetMyAdsCarsLoading());
     FirebaseFirestore.instance
         .collection("cars")
-        .where('sellerId', isEqualTo: '${FirebaseAuth.instance.currentUser!.uid}')
+        .where('sellerId',
+            isEqualTo: '${FirebaseAuth.instance.currentUser!.uid}')
         .snapshots()
         .listen((event) {
       myCarsList.clear();
@@ -156,4 +206,10 @@ class MainCubit extends Cubit<MainState> {
       emit(GetMyAdsCarsSuccess());
     });
   }
+
+  bool carTaxPaid = false;
+   void setUpCarTaxPaid(){
+     this.carTaxPaid= !carTaxPaid;
+     emit(ChangeCheckBoxState());
+   }
 }

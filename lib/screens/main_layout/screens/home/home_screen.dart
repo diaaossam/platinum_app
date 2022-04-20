@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:platinum_app/screens/main_layout/cubit/main_cubit.dart';
-import 'package:platinum_app/screens/main_layout/screens/category_screen/category_screen.dart';
 import 'package:platinum_app/screens/main_layout/screens/home/custom_card.dart';
 import 'package:platinum_app/shared/helper/mangers/assets_manger.dart';
 import 'package:platinum_app/shared/helper/mangers/constants.dart';
@@ -9,6 +8,7 @@ import 'package:platinum_app/shared/helper/mangers/size_config.dart';
 import 'package:platinum_app/shared/helper/methods.dart';
 
 import '../../../../shared/styles/styles.dart';
+import '../../../category_screen/category_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -47,7 +47,6 @@ class HomeScreen extends StatelessWidget {
                           image: AssetsManger.sedan,
                           onTap: () {
                             navigateTo(context, CategoryScreen(ConstantsManger.sedan));
-
                           }),
                       CategoryCard(
                           title: 'SUV',
