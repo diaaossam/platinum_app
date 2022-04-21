@@ -9,7 +9,7 @@ class MainLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MainCubit>(
-      create: (context) => MainCubit(),
+      create: (context) => MainCubit()..getUserInfoProfile(),
       child: BlocConsumer<MainCubit, MainState>(
         listener: (context, state) {
         },
@@ -22,6 +22,7 @@ class MainLayout extends StatelessWidget {
             ),
             body: cubit.screensList[cubit.currentIndex],
             bottomNavigationBar: BottomNavigationBar(
+
               items:cubit.bottomListItem,
               currentIndex: cubit.currentIndex,
               onTap: (int index)=>cubit.changeBottomNav(index),
