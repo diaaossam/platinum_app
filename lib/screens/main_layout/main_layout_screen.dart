@@ -9,7 +9,7 @@ class MainLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<MainCubit>(
-      create: (context) => MainCubit(),
+      create: (context) => MainCubit()..getUserInfoProfile(),
       child: BlocConsumer<MainCubit, MainState>(
         listener: (context, state) {
         },

@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 import 'package:platinum_app/models/car_model.dart';
+import 'package:platinum_app/models/user_model.dart';
 import 'package:platinum_app/screens/main_layout/screens/home/home_screen.dart';
 import 'package:platinum_app/screens/main_layout/screens/my_ads_screen/my_ads_screen.dart';
 import 'package:platinum_app/screens/main_layout/screens/profile/profile_screen.dart';
@@ -212,4 +213,71 @@ class MainCubit extends Cubit<MainState> {
      this.carTaxPaid= !carTaxPaid;
      emit(ChangeCheckBoxState());
    }
+   /////////////////////////////////////////////////////////////
+
+  UserModel ? userModel;
+  /*void getUserInfo() {
+    emit(GetUserInfoLoadingProfileState());
+    FirebaseFirestore.instance
+        .collection(ConstantsManger.USERS)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((value) {
+      userModel = UserModel.fromJson(value.data() ?? {});
+      emit(GetUserInfoSuccessProfileState());
+    }).catchError((error) {
+      emit(GetUserInfoFailureProfileState());
+      print(error.toString());
+    });
+  }*/
+
+  void getUserInfoProfile() {
+    emit(LoadingUser());
+    FirebaseFirestore.instance
+        .collection(ConstantsManger.USERS)
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .snapshots().listen((user) {
+      userModel = UserModel.fromJson(user.data() ?? {});
+      emit(GetUserInfoSuccessProfileState());
+    });
+  }
+
+
+  var _picker = ImagePicker();
+  File? profileImage;
+
+  Future getProfileImage() async  {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      profileImage = File(pickedFile.path);
+      uploadImageToImage(profileImage);
+    } else {
+      print('No Image Selected');
+    }
+  }
+
+  void uploadImageToImage(File? profileImage) {
+    firebase_storage.FirebaseStorage.instance
+        .ref()
+        .child(
+        '${ConstantsManger.USERS}/profile/${Uri.file(profileImage!.path).pathSegments.last}')
+        .putFile(profileImage)
+        .then((value) {
+      value.ref.getDownloadURL().then((value) {
+        FirebaseFirestore.instance
+            .collection(ConstantsManger.USERS)
+            .doc(FirebaseAuth.instance.currentUser!.uid)
+            .update({'image': value});
+      });
+      emit(ChangeUserProfileImage());
+    }).catchError((error) {
+      print(error.toString());
+    });
+  }
+
+  void signOut(){
+    FirebaseAuth.instance.signOut().then((value) {
+      emit(SignOutSuccess());
+    });
+  }
 }

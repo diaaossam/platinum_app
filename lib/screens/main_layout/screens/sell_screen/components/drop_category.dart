@@ -18,7 +18,7 @@ class DropDownCategory extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(15))
             ),
             hint: Text(
-              'Build Type',
+              'Build Type *',
               style: TextStyle(
                 fontSize: getProportionateScreenHeight(20.0),
                 color: Theme

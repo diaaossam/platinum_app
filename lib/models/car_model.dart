@@ -29,11 +29,11 @@ class CarModel {
     required this.enginePower,
     required this.mileage,
     required this.year,
-    required this.licenseExpire,
-    required this.color,
+    this.licenseExpire,
+    this.color,
     required this.fuelType,
-    required this.number,
-    required this.problems,
+    this.number,
+    this.problems,
     required this.itemCon,
   });
 

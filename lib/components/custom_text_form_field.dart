@@ -12,7 +12,7 @@ class CustomTextFormField extends StatelessWidget {
   dynamic validate;
   dynamic onTap;
   dynamic onSaved;
-  var controller;
+  TextEditingController ? controller;
 
   String lableText;
   String hintText;

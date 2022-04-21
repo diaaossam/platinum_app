@@ -29,6 +29,7 @@ class _BodyState extends State<Body> {
     _controller = VideoPlayerController.network(widget.carModel!.video ?? '')
       ..initialize().then((value) {
         setState(() {});
+        _controller!.play();
       });
   }
 
@@ -56,7 +57,11 @@ class _BodyState extends State<Body> {
               : ListView(
             children: [
               ProductImages(carModel: cubit.carModel!),
-              Center(child: _controller!.value.isInitialized ? AspectRatio(
+              SizedBox(height: 15,),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 50),
+                  height: 200,
+                  child: _controller!.value.isInitialized ? AspectRatio(
                 aspectRatio: 16.0 / 21.0, child:VideoPlayer(_controller!),):Center()),
               TopRoundedContainer(
                 color: Colors.white,

@@ -154,21 +154,21 @@ class _SellCarScreenState extends State<SellCarScreen> {
                     ),
                     CustomTextFormField(
                         controller: countryReg,
-                        lableText: 'Country registration',
+                        lableText: 'Country registration *',
                         hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
                     CustomTextFormField(
                         controller: enginePower,
-                        lableText: 'Engine Power',
+                        lableText: 'Engine Power *',
                         hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
                     CustomTextFormField(
                         controller: mileage,
-                        lableText: 'mileage',
+                        lableText: 'mileage*',
                         hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
@@ -181,7 +181,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
                       height: getProportionateScreenHeight(10.0),
                     ),
                     CustomTextFormField(
-                        controller: year, lableText: 'Year', hintText: 'n'),
+                        controller: year, lableText: 'Year*', hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
                     ),
@@ -208,7 +208,6 @@ class _SellCarScreenState extends State<SellCarScreen> {
                     SizedBox(
                       height: getProportionateScreenHeight(20.0),
                     ),
-
                     AppText(text: 'License Status'),
                     SizedBox(
                       height: getProportionateScreenHeight(10.0),
@@ -264,15 +263,15 @@ class _SellCarScreenState extends State<SellCarScreen> {
                                   carModel: CarModel(
                                       year: year.text,
                                       video: ConstantsManger.DEFAULT,
-                                      problems: problems.text,
-                                      number: number.text,
+                                      problems:problems.text ==null ? ConstantsManger.DEFAULT : problems.text,
+                                      number: number.text ==null ? ConstantsManger.DEFAULT : number.text,
                                       mileage: mileage.text,
-                                      licenseExpire: licenseExpire.text,
+                                      licenseExpire: licenseExpire.text ==null ? ConstantsManger.DEFAULT : licenseExpire.text,
                                       itemCon: cubit.itemCon,
                                       fuelType: cubit.fuelType,
                                       enginePower: enginePower.text,
                                       countryReg: countryReg.text,
-                                      color: color.text,
+                                      color: color.text ==null ? ConstantsManger.DEFAULT : color.text,
                                       image: [],
                                       sellerId: FirebaseAuth
                                           .instance.currentUser!.uid,

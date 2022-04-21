@@ -32,3 +32,11 @@ class GetMyAdsCarsSuccess extends MainState {}
 class GetMyAdsCarsLoading extends MainState {}
 class RemoveCarMyAds extends MainState {}
 class ChangeCheckBoxState extends MainState {}
+
+
+class GetUserInfoSuccessProfileState extends MainState {}
+class GetUserInfoFailureProfileState extends MainState {}
+class ChangeUserProfileImage extends MainState {}
+class SignOutSuccess extends MainState {}
+class UpdateUserInfoSuccess extends MainState {}
+class LoadingUser extends MainState {}
