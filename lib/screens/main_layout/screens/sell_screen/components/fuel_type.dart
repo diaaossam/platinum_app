@@ -19,7 +19,7 @@ class DropDownFuelType extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(15))
             ),
             hint: Text(
-              'Select Fuel Type',
+              'Select Fuel Type *',
               style: TextStyle(
                 fontSize: getProportionateScreenHeight(20.0),
                 color: Theme

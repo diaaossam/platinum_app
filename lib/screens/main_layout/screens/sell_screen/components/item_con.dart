@@ -18,7 +18,7 @@ class DropDownItemCondition extends StatelessWidget {
                 borderRadius: BorderRadius.all(Radius.circular(15))
             ),
             hint: Text(
-              'Select Item Condition',
+              'Select Item Condition *',
               style: TextStyle(
                 fontSize: getProportionateScreenHeight(20.0),
                 color: Theme.of(context).hintColor,

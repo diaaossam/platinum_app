@@ -203,7 +203,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
                     ),
                     CustomTextFormField(
                         controller: problems,
-                        lableText: 'Any car Problems',
+                        lableText: 'Any car Problems ?',
                         hintText: 'n'),
                     SizedBox(
                       height: getProportionateScreenHeight(20.0),
@@ -245,7 +245,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
                       height: getProportionateScreenHeight(20.0),
                     ),
                     CustomButton(
-                        text: 'Confirm',
+                        text: 'SUBMIT',
                         press: () {
                           if (formKey.currentState!.validate()) {
                             if (cubit.categoryText == null) {
@@ -324,7 +324,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
       },
       decoration: InputDecoration(
         border: ThemeManger.outlineInputBorder(),
-        labelText: "Product Description",
+        labelText: "Product Description *",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
     );
@@ -343,7 +343,7 @@ class _SellCarScreenState extends State<SellCarScreen> {
       },
       decoration: InputDecoration(
         border: ThemeManger.outlineInputBorder(),
-        labelText: "Product Price",
+        labelText: "Product Price *",
         floatingLabelBehavior: FloatingLabelBehavior.always,
       ),
     );
