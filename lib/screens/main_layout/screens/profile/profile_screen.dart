@@ -114,7 +114,7 @@ class ProfileScreen extends StatelessWidget {
       },
     );
   }
-
+//2
   ImageProvider setImage(MainCubit cubit) {
     if ("${cubit.userModel!.image}" == ConstantsManger.DEFAULT) {
       return AssetImage('assets/images/user.png');

@@ -216,20 +216,6 @@ class MainCubit extends Cubit<MainState> {
    /////////////////////////////////////////////////////////////
 
   UserModel ? userModel;
-  /*void getUserInfo() {
-    emit(GetUserInfoLoadingProfileState());
-    FirebaseFirestore.instance
-        .collection(ConstantsManger.USERS)
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      userModel = UserModel.fromJson(value.data() ?? {});
-      emit(GetUserInfoSuccessProfileState());
-    }).catchError((error) {
-      emit(GetUserInfoFailureProfileState());
-      print(error.toString());
-    });
-  }*/
 
   void getUserInfoProfile() {
     emit(LoadingUser());
