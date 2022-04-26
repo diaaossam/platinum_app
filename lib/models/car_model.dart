@@ -3,6 +3,7 @@ import 'package:platinum_app/shared/helper/mangers/constants.dart';
 class CarModel {
   String? id;
   String? sellerId;
+  String ? userName;
   String? title;
   String? price;
   List<String> image = [];
@@ -15,6 +16,7 @@ class CarModel {
 
 
   CarModel({
+    required this.userName,
     this.id = ConstantsManger.DEFAULT,
     required this.title,
     required this.price,
@@ -40,7 +42,7 @@ class CarModel {
   CarModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
-
+    userName= json['userName'];
     price = json['price'];
     desc = json['desc'];
     video = json['video'];
@@ -68,6 +70,7 @@ class CarModel {
 
   Map<String, dynamic> toMap() {
     return {
+      'userName':userName,
       'id': id,
       'title': title,
       'price': price,

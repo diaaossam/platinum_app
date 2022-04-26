@@ -114,6 +114,8 @@ class CategoryScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Column(
                 children: [
+                  AppText(text: 'Seller :${model!.userName}'),
+                  SizedBox(height: getProportionateScreenHeight(10.0)),
                   Expanded(
                     child: Container(
                       decoration: BoxDecoration(
@@ -124,6 +126,7 @@ class CategoryScreen extends StatelessWidget {
                               fit: BoxFit.cover)),
                     ),
                   ),
+                  //
                   SizedBox(
                     height: getProportionateScreenHeight(10),
                   ),
