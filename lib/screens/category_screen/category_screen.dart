@@ -1,14 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:platinum_app/components/app_text.dart';
 import 'package:platinum_app/models/car_model.dart';
-import 'package:platinum_app/screens/main_layout/screens/category_screen/cubit/category_cubit.dart';
+import 'package:platinum_app/screens/details/details_screen.dart';
 import 'package:platinum_app/shared/helper/mangers/colors.dart';
 import 'package:platinum_app/shared/helper/mangers/size_config.dart';
 
 import '../../../../shared/helper/methods.dart';
 import '../../../../shared/styles/styles.dart';
+import 'cubit/category_cubit.dart';
 
 class CategoryScreen extends StatelessWidget {
   String type;
@@ -67,6 +69,7 @@ class CategoryScreen extends StatelessWidget {
                                 children: List.generate(
                                     cubit.carsList.length,
                                     (index) => productsView(
+                                        context: context,
                                         model: cubit.carsList[index],
                                         cubit: cubit))),
                           ),
@@ -93,65 +96,84 @@ class CategoryScreen extends StatelessWidget {
   }
 
   Widget productsView(
-      {required CarModel? model, required CategoryCubit cubit}) {
-    return Card(
-      child: Padding(
-        padding: EdgeInsets.all(getProportionateScreenHeight(10.0)),
-        child: Container(
-          height: SizeConfigManger.bodyHeight*0.5,
-          width: SizeConfigManger.bodyHeight*0.5,
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8.0),
-            child: Column(
-              children: [
-                Expanded(
-                  child: Container(
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                            getProportionateScreenHeight(8.0)),
-                        image: DecorationImage(
-                            image: NetworkImage('${model!.image}'),
-                            fit: BoxFit.cover)),
-                  ),
-                ),
-                SizedBox(
-                  height: getProportionateScreenHeight(10),
-                ),
-                AppText(text: model.title ?? '',textSize: 24.0),
-                SizedBox(
-                  height: getProportionateScreenHeight(5),
-                ),
-                Row(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          right: getProportionateScreenHeight(10.0)),
-                      child: AppText(text:
-                        "${model.price} EGP",
-                        textSize: 18.0,
-
-                      ),
+      {required CarModel? model,
+      required CategoryCubit cubit,
+      required context}) {
+    return InkWell(
+      onTap: () {
+        navigateTo(context, DetailsScreen(carModel: model));
+      },
+      child: Card(
+        child: Padding(
+          padding: EdgeInsets.all(getProportionateScreenHeight(10.0)),
+          child: Container(
+            height: SizeConfigManger.bodyHeight * 0.5,
+            width: SizeConfigManger.bodyHeight * 0.5,
+            color: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+              child: Column(
+                children: [
+                  AppText(text: 'Seller :${model!.userName}'),
+                  SizedBox(height: getProportionateScreenHeight(10.0)),
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                              getProportionateScreenHeight(8.0)),
+                          image: DecorationImage(
+                              image: NetworkImage('${model!.image[0]}'),
+                              fit: BoxFit.cover)),
                     ),
-                    Spacer(),
-                    CircleAvatar(
-                      backgroundColor: model.isFav == true
-                          ? ColorsManger.FavColor
-                          : Colors.grey[300],
-                      child: IconButton(
-                        icon: Icon(
-                          Icons.favorite_border,
-                          color: Colors.white,
+                  ),
+                  //
+                  SizedBox(
+                    height: getProportionateScreenHeight(10),
+                  ),
+                  AppText(text: model.title ?? '', textSize: 24.0),
+                  SizedBox(
+                    height: getProportionateScreenHeight(5),
+                  ),
+                  Row(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            right: getProportionateScreenHeight(10.0)),
+                        child: AppText(
+                          text: "${model.price} EGP",
+                          textSize: 18.0,
                         ),
-                        onPressed: () {
+                      ),
+                      Spacer(),
+                      InkWell(
+                        onTap: (){
                           cubit.changeFav(
                               isFav: model.isFav ?? false, id: "${model.id}");
                         },
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                        child: SvgPicture.asset(
+                          "assets/icons/Heart Icon_2.svg",
+                          color:
+                          model.isFav! ? Color(0xFFFF4848) : Color(0xFFDBDEE4),),
+                      )
+                     /* CircleAvatar(
+                        backgroundColor: model.isFav == true
+                            ? ColorsManger.FavColor
+                            : Colors.grey[300],
+                        child: IconButton(
+                          icon: Icon(
+                            Icons.favorite_border,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            cubit.changeFav(
+                                isFav: model.isFav ?? false, id: "${model.id}");
+                          },
+                        ),
+                      ),*/
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

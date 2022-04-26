@@ -5,20 +5,21 @@ import 'package:platinum_app/screens/main_layout/cubit/main_cubit.dart';
 
 import '../../../../../shared/helper/mangers/size_config.dart';
 
-class DropDownCategory extends StatelessWidget {
+class DropDownFuelType extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<MainCubit,MainState>(
       listener: (context, state) {},
       builder: (context, state) {
         return DropdownButtonHideUnderline(
+
           child: DropdownButton2(
             buttonDecoration: BoxDecoration(
-              border: Border.all(color: Colors.grey,),
-                  borderRadius: BorderRadius.all(Radius.circular(15))
+                border: Border.all(color: Colors.grey,),
+                borderRadius: BorderRadius.all(Radius.circular(15))
             ),
             hint: Text(
-              'Build Type *',
+              'Select Fuel Type *',
               style: TextStyle(
                 fontSize: getProportionateScreenHeight(20.0),
                 color: Theme
@@ -28,7 +29,7 @@ class DropDownCategory extends StatelessWidget {
             ),
             items: MainCubit
                 .get(context)
-                .categoryList
+                .fuelList
                 .map((item) =>
                 DropdownMenuItem<String>(
                   value: item,
@@ -42,9 +43,9 @@ class DropDownCategory extends StatelessWidget {
                 .toList(),
             value: MainCubit
                 .get(context)
-                .categoryText,
+                .fuelType,
             onChanged: (value) {
-              MainCubit.get(context).chooseCategory(value as String);
+              MainCubit.get(context).choosefuelType(value as String);
             },
             buttonHeight: getProportionateScreenHeight(50.0),
             buttonWidth: double.infinity,

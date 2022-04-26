@@ -12,7 +12,7 @@ class CustomTextFormField extends StatelessWidget {
   dynamic validate;
   dynamic onTap;
   dynamic onSaved;
-  var controller;
+  TextEditingController ? controller;
 
   String lableText;
   String hintText;
@@ -44,7 +44,7 @@ class CustomTextFormField extends StatelessWidget {
         labelText: lableText,
         hintText: hintText == 'n'  ? null :hintText,
         border: ThemeManger.outlineInputBorder(),
-        floatingLabelBehavior: FloatingLabelBehavior.never,
+        floatingLabelBehavior: FloatingLabelBehavior.always,
         suffixIcon: suffixIcon == null
             ? null
             : Padding(

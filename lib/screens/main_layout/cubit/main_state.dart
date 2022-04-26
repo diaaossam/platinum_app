@@ -9,7 +9,15 @@ class UploadCarInfoLoading extends MainState {}
 class UploadCarInfoSuccess extends MainState {}
 class OnGetSearchLoadingState extends MainState {}
 class ChooseCategoryState extends MainState {}
-class UploadProductSuccessState extends MainState {}
+class ChooseFuelState extends MainState {}
+class ChooseItemConState extends MainState {}
+class UploadProductImageSuccessState extends MainState {}
+class UploadProductVedioSuccessState extends MainState {
+  File ?file;
+
+  UploadProductVedioSuccessState(this.file);
+}
+class InitVedioState extends MainState {}
 class UploadProductFailerState extends MainState {
   String error;
 
@@ -23,3 +31,12 @@ class RemoveCarFavourtie extends MainState {}
 class GetMyAdsCarsSuccess extends MainState {}
 class GetMyAdsCarsLoading extends MainState {}
 class RemoveCarMyAds extends MainState {}
+class ChangeCheckBoxState extends MainState {}
+
+
+class GetUserInfoSuccessProfileState extends MainState {}
+class GetUserInfoFailureProfileState extends MainState {}
+class ChangeUserProfileImage extends MainState {}
+class SignOutSuccess extends MainState {}
+class UpdateUserInfoSuccess extends MainState {}
+class LoadingUser extends MainState {}

@@ -45,6 +45,10 @@ dependencies:
   tbib_toast: ^0.0.2
   sqflite: ^2.0.2+1
   path_provider: ^2.0.9
+  video_player: ^2.3.0
+  carousel_slider: ^4.0.0
+  comment_box: ^0.0.17
+
 
 
   #firebase
