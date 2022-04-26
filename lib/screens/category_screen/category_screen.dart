@@ -126,7 +126,7 @@ class CategoryScreen extends StatelessWidget {
                               fit: BoxFit.cover)),
                     ),
                   ),
-                  //
+                  //dsadsadsadsa
                   SizedBox(
                     height: getProportionateScreenHeight(10),
                   ),
